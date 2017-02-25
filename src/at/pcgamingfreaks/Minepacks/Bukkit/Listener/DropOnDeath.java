@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2016 GeorgH93
+ *   Copyright (C) 2016, 2017 GeorgH93
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,20 +21,16 @@ import at.pcgamingfreaks.Minepacks.Bukkit.API.Callback;
 import at.pcgamingfreaks.Minepacks.Bukkit.Backpack;
 import at.pcgamingfreaks.Minepacks.Bukkit.Minepacks;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-public class DropOnDeath implements Listener
+public class DropOnDeath extends MinepacksListener
 {
-	private final Minepacks plugin;
-
 	public DropOnDeath(Minepacks plugin)
 	{
-		this.plugin = plugin;
+		super(plugin);
 	}
 
 	@EventHandler
@@ -43,22 +39,13 @@ public class DropOnDeath implements Listener
 		final Player player = event.getEntity();
 		if (!player.hasPermission("backpack.keepOnDeath"))
 		{
+			final Location location = player.getLocation();
 			plugin.getBackpack(player, new Callback<Backpack>()
 			{
 				@Override
 				public void onResult(Backpack backpack)
 				{
-					Inventory backpackInventory = backpack.getInventory();
-					for(ItemStack i : backpackInventory.getContents())
-					{
-						if(i != null)
-						{
-							player.getWorld().dropItemNaturally(player.getLocation(), i);
-							backpackInventory.remove(i);
-							backpack.setChanged();
-						}
-					}
-					backpack.save();
+					backpack.drop(location);
 				}
 
 				@Override
