@@ -17,9 +17,6 @@
 
 package at.pcgamingfreaks.MinePacks;
 
-import at.pcgamingfreaks.Bukkit.NMSReflection;
-import at.pcgamingfreaks.StringUtils;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -33,6 +30,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
+import at.pcgamingfreaks.StringUtils;
+import at.pcgamingfreaks.Bukkit.NMSReflection;
 
 public class Backpack implements InventoryHolder
 {
@@ -148,7 +148,6 @@ public class Backpack implements InventoryHolder
 		return inWork;
 	}
 
-	@SuppressWarnings("unused")
 	public int getSize()
 	{
 		return size;
@@ -212,7 +211,6 @@ public class Backpack implements InventoryHolder
 		return bp;
 	}
 
-	@SuppressWarnings("unused")
 	public boolean hasChanged()
 	{
 		return hasChanged;

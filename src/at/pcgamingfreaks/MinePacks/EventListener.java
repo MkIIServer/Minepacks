@@ -17,7 +17,6 @@
 
 package at.pcgamingfreaks.MinePacks;
 
-import at.pcgamingfreaks.MinePacks.Database.Database;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,6 +28,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import at.pcgamingfreaks.MinePacks.Database.Database;
 
 public class EventListener implements Listener
 {
@@ -96,6 +97,7 @@ public class EventListener implements Listener
 					backpack.save();
 				}
 				backpack.close(closer);
+				plugin.opening.remove(event.getPlayer());
 				if(event.getPlayer().getName().equals(backpack.getOwner().getName()))
 				{
 					if(showCloseMessageOwn)
@@ -154,5 +156,6 @@ public class EventListener implements Listener
 		{
 			plugin.cooldowns.remove(event.getPlayer());
 		}
+        plugin.opening.remove(event.getPlayer());
 	}
 }

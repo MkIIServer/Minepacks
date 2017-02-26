@@ -17,14 +17,9 @@
 
 package at.pcgamingfreaks.MinePacks;
 
-import at.pcgamingfreaks.Bukkit.Utils;
-import at.pcgamingfreaks.ConsoleColor;
-import at.pcgamingfreaks.MinePacks.Database.Config;
-import at.pcgamingfreaks.MinePacks.Database.Database;
-import at.pcgamingfreaks.MinePacks.Database.Language;
-import at.pcgamingfreaks.MinePacks.Updater.UpdateResult;
-import at.pcgamingfreaks.MinePacks.Updater.Updater;
-import at.pcgamingfreaks.StringUtils;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -32,8 +27,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.logging.Logger;
+import at.pcgamingfreaks.ConsoleColor;
+import at.pcgamingfreaks.StringUtils;
+import at.pcgamingfreaks.Bukkit.Utils;
+import at.pcgamingfreaks.MinePacks.Database.Config;
+import at.pcgamingfreaks.MinePacks.Database.Database;
+import at.pcgamingfreaks.MinePacks.Database.Language;
+import at.pcgamingfreaks.MinePacks.Updater.UpdateResult;
+import at.pcgamingfreaks.MinePacks.Updater.Updater;
 
 public class MinePacks extends JavaPlugin
 {
@@ -45,6 +46,7 @@ public class MinePacks extends JavaPlugin
 	public Database DB;
 
 	public HashMap<Player, Long> cooldowns = new HashMap<>();
+	public HashSet<Player> opening = new HashSet<Player>();
 
 	public static String backpackTitleOther, backpackTitle;
 	public String messageInvalidBackpack;
@@ -77,7 +79,8 @@ public class MinePacks extends JavaPlugin
 		lang.load(config.getLanguage(), config.getLanguageUpdateMode());
 		DB = Database.getDatabase(this);
 		getCommand("backpack").setExecutor(new OnCommand(this));
-		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+        getServer().getPluginManager().registerEvents(new EventListener(this), this);
+        getServer().getPluginManager().registerEvents(new ItemLimitEventListener(this), this);
 
 		if(config.getFullInvCollect())
 		{
@@ -160,6 +163,7 @@ public class MinePacks extends JavaPlugin
 			opener.sendMessage(messageInvalidBackpack);
 			return;
 		}
+		opening.add(opener);
 		backpack.open(opener, editable);
 	}
 
