@@ -34,7 +34,7 @@ import at.pcgamingfreaks.MinePacks.Database.Database;
 public class EventListener implements Listener
 {
 	private MinePacks plugin;
-	private boolean drop_on_death, showCloseMessageOwn, showCloseMessageOther, onJoinCooldown;
+	private boolean drop_on_death, showCloseMessageOwn, showCloseMessageOther;
 	private long joinCooldown;
 	private String message_OwnBPClose, message_PlayerBPClose;
 	
@@ -47,7 +47,6 @@ public class EventListener implements Listener
 		showCloseMessageOther = message_PlayerBPClose != null && plugin.config.getShowCloseMessage();
 		showCloseMessageOwn = message_OwnBPClose != null && plugin.config.getShowCloseMessage();
 		joinCooldown = plugin.config.getCommandCooldownAfterJoin();
-		onJoinCooldown = joinCooldown > 0;
 	}
 	
 	@EventHandler
@@ -137,9 +136,9 @@ public class EventListener implements Listener
 	public void onPlayerLoginEvent(PlayerJoinEvent event)
 	{
 		plugin.DB.updatePlayerAndLoadBackpack(event.getPlayer());
-		if(onJoinCooldown)
+		if(joinCooldown > 0 && !event.getPlayer().hasPermission("backpack.noCooldown"))
 		{
-			plugin.cooldowns.put(event.getPlayer(), joinCooldown);
+			plugin.cooldowns.put(event.getPlayer(), System.currentTimeMillis() + joinCooldown);
 		}
 	}
 	

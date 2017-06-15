@@ -67,7 +67,7 @@ public class MinePacks extends JavaPlugin
 		//region Check compatibility with used minecraft version
 		String name = Bukkit.getServer().getClass().getPackage().getName();
 		String[] version = name.substring(name.lastIndexOf('.') + 2).split("_");
-		if((version[0].equals("1") && Integer.valueOf(version[1]) > 11) || Integer.valueOf(version[0]) > 1)
+		if((version[0].equals("1") && Integer.valueOf(version[1]) > 12) || Integer.valueOf(version[0]) > 1)
 		{
 			MinePacks.getInstance().warnOnVersionIncompatibility(version[0] + "." + version[1]);
 			this.setEnabled(false);
@@ -116,23 +116,23 @@ public class MinePacks extends JavaPlugin
 	public void onDisable()
 	{
 		Updater updater = null;
-		if(config.getAutoUpdate()) // Lets check for updates
+		if(config != null && config.getAutoUpdate()) // Lets check for updates
 		{
 			log.info("Checking for updates ...");
 			updater = new Updater(this, this.getFile(), true, 83445); // Create a new updater with dev.bukkit.org as update provider
 			updater.update(); // Starts the update, if there is a new update available it will download while we close the rest
 		}
 		getServer().getScheduler().cancelTasks(this); // Stop the listener, we don't need them any longer
-		DB.close(); // Close the DB connection, we won't need them any longer
+		if(DB != null) DB.close(); // Close the DB connection, we won't need them any longer
 		if(updater != null) updater.waitForAsyncOperation(); // The update can download while we kill the listeners and close the DB connections
 		instance = null;
-		log.info(lang.get("Console.Disabled"));
+		if(lang != null) log.info(lang.get("Console.Disabled"));
 	}
 
 	public void warnOnVersionIncompatibility(String version)
 	{
 		log.warning(ConsoleColor.RED + "################################" + ConsoleColor.RESET);
-		log.warning(ConsoleColor.RED + String.format(lang.getTranslated("Console.MinecraftVersionNotCompatible"), version, getDescription().getVersion()) + ConsoleColor.RESET);
+		log.warning(ConsoleColor.RED + String.format("Your minecraft version (MC %1$s) is currently not compatible with this plugins version (%2$s). Please check for updates!", version, getDescription().getVersion()) + ConsoleColor.RESET);
 		log.warning(ConsoleColor.RED + "################################" + ConsoleColor.RESET);
 		Utils.blockThread(5);
 	}

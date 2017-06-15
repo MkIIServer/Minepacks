@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>at.pcgamingfreaks</groupId>
 	<artifactId>MinePacks</artifactId>
-	<version>1.16.6-MicsEdit-V2</version>
+	<version>1.17.1-MicsEdit-V1</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:GeorgH93/Bukkit_Minepacks.git</connection>
@@ -43,9 +43,15 @@
 
 	<dependencies>
 		<dependency>
+<<<<<<< HEAD
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
 			<version>1.11.2-R0.1-SNAPSHOT</version>
+=======
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.12-R0.1-SNAPSHOT</version>
+>>>>>>> upstream/master
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

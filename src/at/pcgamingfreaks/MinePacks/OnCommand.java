@@ -65,21 +65,18 @@ public class OnCommand implements CommandExecutor
 		if(args.length == 0)
 		{
 			// Open player backpack
-			if(player.hasPermission("backpack"))
+			if(player.hasPermission("backpack") || player.hasPermission("backpack.use"))
 			{
 				if(gameModes.contains(player.getGameMode()) || player.hasPermission("backpack.ignoreGameMode"))
 				{
-					if(cooldown > 0 && !player.hasPermission("backpack.noCooldown"))
+					if(!player.hasPermission("backpack.noCooldown"))
 					{
-						if(plugin.cooldowns.containsKey(player))
+						if(plugin.cooldowns.containsKey(player) && (System.currentTimeMillis() - plugin.cooldowns.get(player)) < 0)
 						{
-							if((System.currentTimeMillis() - plugin.cooldowns.get(player)) < cooldown)
-							{
-								sender.sendMessage(messageCooldown);
-								return true;
-							}
+							sender.sendMessage(messageCooldown);
+							return true;
 						}
-						plugin.cooldowns.put(player, System.currentTimeMillis());
+						if(cooldown > 0) plugin.cooldowns.put(player, System.currentTimeMillis() + cooldown);
 					}
 					plugin.openBackpack(player, player, true);
 				}
@@ -101,7 +98,7 @@ public class OnCommand implements CommandExecutor
 				case "help": // Shows the help for the plugin
 				case "hilfe":
 				case "?":
-					if(player.hasPermission("backpack"))
+					if(player.hasPermission("backpack") || player.hasPermission("backpack.use"))
 					{
 						player.sendMessage(ChatColor.GOLD + "Minepacks Help:");
 						player.sendMessage(ChatColor.AQUA + "/backpack" + ChatColor.WHITE + " - " + plugin.lang.getTranslated("Description.Backpack"));
